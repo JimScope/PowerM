@@ -1,10 +1,10 @@
 # Constants and Settings
 
 # The email address to send and read from.
-email_user_name = "lucia.77@nauta.cu"
+email_user_name = "unknown@example.com"
 
 # Email account password.
-email_password = "Angel2307@1"
+email_password = "My Password"
 
 subject = "hi james"
 
