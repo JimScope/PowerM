@@ -2,8 +2,6 @@
 
 from time import sleep
 import traceback
-from urllib.request import urlopen, Request
-from urllib.error import URLError
 
 
 import config
@@ -14,15 +12,6 @@ from modules.test import multiply
 from modules.test import slow
 
 
-# make sure there is an internet connection
-def checkInternetConnection():
-    try:
-        urlopen('https://google.com', timeout=3)
-        return True
-    except URLError as err:
-        return False
-
-
 def on_startup():
     print("PowerMail")
     utilities.log("Starting up.")
@@ -30,10 +19,6 @@ def on_startup():
     if config.email_user_name == "" or config.white_list == [] or config.email_password == "":
         utilities.log("Email variables are not setup. Exiting.")
         exit(1)
-    # if checkInternetConnection() is False:
-    #    print("FATAL: Network Problems")
-    #    utilities.log("FATAL: Check Internet Connection")
-    #    exit(1)
 
     utilities.log("Waiting for startup delay.")
 
@@ -47,18 +32,7 @@ def read_commands():
         print("Empty")
     else:
         for x in messages:
-            if x[1].startswith("$web "):
-                print(x[1].lstrip("$web "))
-
-            elif x[1].startswith("$google "):
-                keywords = x[1].lstrip("$google ")
-                print(keywords.split())
-
-            elif x[1].startswith("$google_image "):
-                keywords = x[1].lstrip("$google_image ")
-                print(keywords.split())
-
-            elif x[1].startswith("$multiply "):
+            if x[1].startswith("$multiply "):
                 keywords = x[1].lstrip("$multiply ")
                 thread_multiply = multiply.MyThread(x[0],keywords)
                 thread_multiply.start()
