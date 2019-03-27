@@ -40,17 +40,17 @@ def read():
     # imap_conn = imaplib.IMAP4_SSL("imap.gmail.com")
     imap_conn = imaplib.IMAP4("imap.nauta.cu")
     imap_conn.login(config.email_user_name, config.email_password)
-    status1, inbox_selec = imap_conn.select("INBOX")
+    status1 = imap_conn.select("INBOX")[0]
 
     try:
-        status2, results = imap_conn.uid('search', None, '(UNSEEN)', 'SUBJECT', '"' + config.subject + '"')
+        results = imap_conn.uid('search', None, '(UNSEEN)', 'SUBJECT', '"' + config.subject + '"')[1]
 
         if results == [b'']:
             print("No Messages Found")
             return None
         else:
             for num in results[0].split():
-                status3, data = imap_conn.uid('fetch', num, '(RFC822)')
+                data = imap_conn.uid('fetch', num, '(RFC822)')[1]
                 msgs.append(data)
                 
             for msg in msgs:
@@ -63,7 +63,7 @@ def read():
                     body = get_body(fullmsg).decode('utf-8').replace('\r\n', '')
                     messages.append((email_from, body))
             return messages
-                    
+
     except Exception as e:
         # In case of errors, wait, then try again
         error_message = "No arguments found with exception."
