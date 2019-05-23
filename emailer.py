@@ -1,6 +1,10 @@
 import imaplib
 import smtplib
-import email
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+from email import message_from_bytes
 import time
 import config
 import utilities
@@ -9,20 +13,30 @@ retry_delay = 180 # Magic Number ;)
 
 
 # Send an email
-def send(destinatario, subject, message=" "):
-    # Construct the email in single-string format
-    eml = "\r\n".join(["To: " + destinatario,
-                       "Subject: " + config.email_subject_prefix + ": " + subject,
-                       "",
-                       message])
+def send(destinatario, subject, message=" ", adjunto=None, name=None):
+    msg = MIMEMultipart()
+    msg['From'] = config.email_user_name
+    msg['To'] = destinatario
+    msg['Subject'] = subject
+    msg.attach(MIMEText(message,'plain'))
+
+    if adjunto is not None:
+        with open(adjunto, 'rb') as attachment:
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload((attachment).read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition',
+            "attachment; filename="+name)
+        msg.attach(part)
 
     try:
+        text = msg.as_string()
         # server = smtplib.SMTP("smtp.gmail.com", 587)
         server = smtplib.SMTP("smtp.nauta.cu", 25)
         server.ehlo()
         #server.starttls()
         server.login(config.email_user_name, config.email_password)
-        server.sendmail(config.email_user_name, [config.email_send_to], eml)
+        server.sendmail(config.email_user_name, destinatario, text)
         server.quit()
     except smtplib.SMTPException as e:
         # In case of errors, wait, and then resend
@@ -46,7 +60,7 @@ def read():
         results = imap_conn.uid('search', None, '(UNSEEN)', 'SUBJECT', '"' + config.subject + '"')[1]
 
         if results == [b'']:
-            print("No Messages Found")
+            # print("No Messages Found")
             return None
         else:
             for num in results[0].split():
@@ -54,7 +68,7 @@ def read():
                 msgs.append(data)
                 
             for msg in msgs:
-                fullmsg = email.message_from_bytes(msg[0][1])
+                fullmsg = message_from_bytes(msg[0][1])
                 email_from = fullmsg.get('from').split('>')[0].split('<')[1]
                 if email_from not in config.white_list:
                     # Log security problems
