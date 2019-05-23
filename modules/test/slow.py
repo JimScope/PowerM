@@ -11,9 +11,8 @@ class MyThread(Thread):
         self.z = z
         self.user = user
 
-    def __version__(self):
-        print("0.1")
-
     def run(self):
         time.sleep(int(self.z))
         emailer.send(self.user, "Slow", "Retraso de: " + str(self.z))
+
+__version__ = '0.1'
