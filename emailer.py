@@ -54,7 +54,7 @@ def read():
     # imap_conn = imaplib.IMAP4_SSL("imap.gmail.com")
     imap_conn = imaplib.IMAP4("imap.nauta.cu")
     imap_conn.login(config.email_user_name, config.email_password)
-    status1 = imap_conn.select("INBOX")[0]
+    imap_conn.select("INBOX")[0]
 
     try:
         results = imap_conn.uid('search', None, '(UNSEEN)', 'SUBJECT', '"' + config.subject + '"')[1]
@@ -65,8 +65,7 @@ def read():
         else:
             for num in results[0].split():
                 data = imap_conn.uid('fetch', num, '(RFC822)')[1]
-                msgs.append(data)
-                
+                msgs.append(data)       
             for msg in msgs:
                 fullmsg = message_from_bytes(msg[0][1])
                 email_from = fullmsg.get('from').split('>')[0].split('<')[1]
