@@ -55,7 +55,7 @@ def main():
             sleep(15)
             read_commands()
 
-    except Exception as e:
+    except Exception:
         # In case of an uncaught exception, get stacktrace for diag and exit.
         trace_string = traceback.format_exc()
 
