@@ -65,7 +65,7 @@ def read():
         else:
             for num in results[0].split():
                 data = imap_conn.uid('fetch', num, '(RFC822)')[1]
-                msgs.append(data)       
+                msgs.append(data)
             for msg in msgs:
                 fullmsg = message_from_bytes(msg[0][1])
                 email_from = fullmsg.get('from').split('>')[0].split('<')[1]
