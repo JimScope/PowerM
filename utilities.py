@@ -1,6 +1,5 @@
 from datetime import datetime
 import tarfile
-import bz2
 import config
 
 
