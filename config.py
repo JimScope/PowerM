@@ -1,22 +1,25 @@
 # Constants and Settings
 
 # The email address to send and read from.
-email_user_name = "unknown@example.com"
+email_user_name = "user@unknown.com"
 
 # Email account password.
-email_password = "My Password"
+email_password = "password"
 
-subject = "Key"
+subject = "Subject Filter"
 
 # A prefix for the subject.
 email_subject_prefix = "Hello from PowerM"
 
 # Where to send notification emails.
-email_send_to = "server@unknown.com"
+support = "server@unknown.com"
 
 # The log file path
 log_file_path = "./logs/cmdMail.log"
 
+# Mails Permited
+white_list = ['test@boo.com',
+            email_user_name]
 
-white_list = ['permited1@example.com',
-          'permited2@example.com']
+
+data_directory = "./data"
