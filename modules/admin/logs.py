@@ -4,7 +4,6 @@ import os
 
 sys.path.append('..')
 import emailer
-import config
 from utilities import compress
 
 class MyThread(Thread):
