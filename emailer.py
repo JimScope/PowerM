@@ -54,7 +54,7 @@ def read():
     # imap_conn = imaplib.IMAP4_SSL("imap.gmail.com")
     imap_conn = imaplib.IMAP4("imap.nauta.cu")
     imap_conn.login(config.email_user_name, config.email_password)
-    imap_conn.select("INBOX")[0]
+    imap_conn.select("INBOX")
 
     try:
         results = imap_conn.uid('search', None, '(UNSEEN)', 'SUBJECT', '"' + config.subject + '"')[1]
